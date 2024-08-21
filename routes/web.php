@@ -184,6 +184,15 @@ Auth::routes(['verify' => true]);
 
 Route::middleware([AdminMiddleware::class])->group(function () {
 
+    Route::get('/appointment-list', [SessionsController::class, 'appointment_list'])->name('appointment-list');
+    Route::get('/user-session-report/{id}', [SessionsController::class, 'user_session_report'])->name('user-session-report');
+    Route::post('session-pdf-store', [SessionsController::class, 'user_session_report_store'])->name('session-pdf-store');
+
+
+
+
+    
+
     Route::get('/notification', [NotificationController::class, 'notification_list'])->name('notification');
     Route::get('/add-notification', [NotificationController::class, 'addnotification'])->name('add-notification');
     Route::post('/notification-store', [NotificationController::class, 'notificationstore'])->name('notification.store');

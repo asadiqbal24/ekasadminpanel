@@ -17,7 +17,8 @@ class CourseController extends Controller
         $course = '';
         $heading = 'Add Courses';
         $sub_heading = 'You can add courses here';
-        return view('content.courses.add', compact('heading', 'sub_heading', 'course'));
+        $course_category = DB::table('course_category')->get();
+        return view('content.courses.add', compact('heading', 'sub_heading', 'course','course_category'));
     }
     public function store(Request $request)
     {
@@ -53,20 +54,21 @@ class CourseController extends Controller
     // }
 
 
-    
-    public function getCourses(){
-      //  dd("true");
+
+    public function getCourses()
+    {
+        //  dd("true");
         return view('content.courses.index');
     }
 
     public function coursesList(Request $request)
     {
         $columns = [
-        1 => 'id',
-        2 => 'universityname',
-        3 => 'programmename',
-        4 => 'ranking',
-        5 => 'location',
+            1 => 'id',
+            2 => 'universityname',
+            3 => 'programmename',
+            4 => 'ranking',
+            5 => 'location',
         ];
 
         $search = [];
@@ -81,64 +83,62 @@ class CourseController extends Controller
         $dir = $request->input('order.0.dir');
 
         if (empty($request->input('search.value'))) {
-        $users = AddCourse::whereNull('deleted_at')->offset($start)
-            ->limit($limit)
-            ->orderBy($order, $dir)
-            ->get();
+            $users = AddCourse::whereNull('deleted_at')->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
-        $search = $request->input('search.value');
+            $search = $request->input('search.value');
 
-        $users = AddCourse::whereNull('deleted_at')->where(function($q) use ($search){
-            $q->where('universityname', 'LIKE', "%{$search}%");
-            $q->orWhere('programmename', 'LIKE', "%{$search}%");
-            $q->orWhere('ranking', 'LIKE', "%{$search}%");
-            $q->orWhere('location', 'LIKE', "%{$search}%");
+            $users = AddCourse::whereNull('deleted_at')->where(function ($q) use ($search) {
+                $q->where('universityname', 'LIKE', "%{$search}%");
+                $q->orWhere('programmename', 'LIKE', "%{$search}%");
+                $q->orWhere('ranking', 'LIKE', "%{$search}%");
+                $q->orWhere('location', 'LIKE', "%{$search}%");
+            })->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
-        })->offset($start)
-            ->limit($limit)
-            ->orderBy($order, $dir)
-            ->get();
-
-        $totalFiltered = AddCourse::whereNull('deleted_at')->where(function($q) use ($search){
-            $q->where('universityname', 'LIKE', "%{$search}%");
-            $q->orWhere('programmename', 'LIKE', "%{$search}%");
-            $q->orWhere('ranking', 'LIKE', "%{$search}%");
-            $q->orWhere('location', 'LIKE', "%{$search}%");
-
-        })->count();
+            $totalFiltered = AddCourse::whereNull('deleted_at')->where(function ($q) use ($search) {
+                $q->where('universityname', 'LIKE', "%{$search}%");
+                $q->orWhere('programmename', 'LIKE', "%{$search}%");
+                $q->orWhere('ranking', 'LIKE', "%{$search}%");
+                $q->orWhere('location', 'LIKE', "%{$search}%");
+            })->count();
         }
 
         $data = [];
 
         if (!empty($users)) {
-        // providing a dummy id instead of database ids
-        $ids = $start;
+            // providing a dummy id instead of database ids
+            $ids = $start;
 
-        foreach ($users as $user) {
-            $nestedData['id'] = $user->id;
-            $nestedData['universityname'] = $user->universityname;
-            $nestedData['programmename'] = $user->programmename;
-            $nestedData['ranking'] = $user->ranking;
-            $nestedData['location'] = $user->location;
+            foreach ($users as $user) {
+                $nestedData['id'] = $user->id;
+                $nestedData['universityname'] = $user->universityname;
+                $nestedData['programmename'] = $user->programmename;
+                $nestedData['ranking'] = $user->ranking;
+                $nestedData['location'] = $user->location;
 
-            $data[] = $nestedData;
-        }
+                $data[] = $nestedData;
+            }
         }
 
         if ($data) {
-        return response()->json([
-            'draw' => intval($request->input('draw')),
-            'recordsTotal' => intval($totalData),
-            'recordsFiltered' => intval($totalFiltered),
-            'code' => 200,
-            'data' => $data,
-        ]);
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => intval($totalData),
+                'recordsFiltered' => intval($totalFiltered),
+                'code' => 200,
+                'data' => $data,
+            ]);
         } else {
-        return response()->json([
-            'message' => 'Internal Server Error',
-            'code' => 500,
-            'data' => [],
-        ]);
+            return response()->json([
+                'message' => 'Internal Server Error',
+                'code' => 500,
+                'data' => [],
+            ]);
         }
     }
 
@@ -152,7 +152,8 @@ class CourseController extends Controller
         $course = AddCourse::find($id);
         $heading = 'Edit Course';
         $sub_heading = 'You can edit Courses here';
-        return view('content.courses.edit', compact('heading', 'sub_heading', 'course'));
+        $course_category = DB::table('course_category')->get();
+        return view('content.courses.edit', compact('heading', 'sub_heading', 'course','course_category'));
     }
     public function update(Request $request, $id)
     {

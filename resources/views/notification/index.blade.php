@@ -36,7 +36,7 @@
 @endsection
 
 @section('content')
-<link rel="stylesheet" href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" />
+
 
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 
@@ -80,7 +80,7 @@
 
 </div>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
 
 <script>
