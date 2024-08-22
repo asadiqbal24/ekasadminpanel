@@ -44,7 +44,8 @@ $(function () {
         { data: 'id' },
         { data: 'username' },
         { data: 'email' },
-        { data: 'datetime' }
+        { data: 'datetime' },
+        { data: 'role' }  
       ],
       columnDefs: [
         
@@ -104,16 +105,28 @@ $(function () {
               // }`;
             }
           },
+          {
+            // Role
+            targets: 4,
+            className: 'text-center',
+            render: function (data, type, full, meta) {
+              
+                return '<span class="role">' + data + '</span>';
+            }
+        },
         {
           // Actions
-          targets: 4,
+          targets: 5,
           title: 'Actions',
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
             return (
 
-              `<a href="/delete/user/${full['id']}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect" data-id="4301" onclick="return confirm('Are you sure you want to delete this?')"><i class="ri-delete-bin-7-line ri-20px"></i></a>`
+              `
+              <a href="/assign-role/${full['id']}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect"><i class="ri-edit-line ri-20px"></i></a>
+              <a href="/delete/user/${full['id']}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect" data-id="4301" onclick="return confirm('Are you sure you want to delete this?')"><i class="ri-delete-bin-7-line ri-20px"></i></a>
+              `
 
             );
           }

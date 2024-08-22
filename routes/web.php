@@ -169,6 +169,9 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\User\ContactUsController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('pusher', function () {
@@ -180,6 +183,49 @@ Route::get('pusher', function () {
 
 
 Auth::routes(['verify' => true]);
+
+
+Route::group(['middleware' => ['auth']], function() {
+
+    Route::get('permissions-index', [PermissionsController::class, 'index'])->name('permissions-index');
+        Route::get('permissions-create', [PermissionsController::class, 'create'])->name('permissions-create');
+        Route::get('permissions-edit/{id}', [PermissionsController::class, 'edit'])->name('permissions-edit');
+        Route::post('permissions-store', [PermissionsController::class, 'store'])->name('permissions-store');
+        Route::post('permissions-update', [PermissionsController::class, 'update'])->name('permissions-update');
+        Route::get('permissions-destroy/{id}', [PermissionsController::class, 'destroy'])->name('permissions-destroy');
+
+
+        Route::get('roles-index', [RolesController::class, 'index'])->name('roles-index');
+        Route::get('roles-create', [RolesController::class, 'create'])->name('roles-create');
+        Route::get('roles-show/{id}', [RolesController::class, 'show'])->name('roles-show');
+        Route::post('roles-store', [RolesController::class, 'store'])->name('roles-store');
+        Route::get('roles-edit/{id}', [RolesController::class, 'edit'])->name('roles-edit');
+        Route::post('roles-update', [RolesController::class, 'update'])->name('roles-update');
+        Route::delete('roles-destroy', [RolesController::class, 'destroy'])->name('roles-destroy');
+
+});
+
+    Route::group(['prefix' => 'users'], function() {
+
+        Route::get('/index', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/create', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{user}/show', [UserController::class, 'show'])->name('users.show');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::patch('/{user}/update', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/{user}/update', [UserController::class, 'destroy'])->name('users.destroy');
+      
+    });
+
+
+
+    
+
+
+
+    
+
+
 
 
 Route::middleware([AdminMiddleware::class])->group(function () {
@@ -399,6 +445,7 @@ Route::get('/courses-list', [CourseController::class,'coursesList'])->name('subs
 
 
 Route::get('get/all/users', [UsersController::class, 'index']);
+Route::get('assign-role/{id}', [UsersController::class, 'assign_role']);
 Route::get('/users-list', [UsersController::class,'UsersList'])->name('UsersList');
 
 
@@ -406,6 +453,7 @@ Route::get('/users-list', [UsersController::class,'UsersList'])->name('UsersList
 Route::get('add/user', [UsersController::class, 'create'])->name('addUser');
 Route::get('delete/user/{id}', [UsersController::class, 'delete']);
 Route::post('store/user', [UsersController::class, 'store']);
+Route::post('update/user', [UsersController::class, 'update']);
 Route::get('make/{id}', [UsersController::class, 'makeAdmin']);
 Route::get('verify/user/{id}', [UsersController::class, 'verifyUser']);
 

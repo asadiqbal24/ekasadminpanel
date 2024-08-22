@@ -205,6 +205,24 @@
           "slug": "sessionslist"
         }
       ]
+    },
+
+    {
+      "name": "Role and Permissions",
+      "icon": "menu-icon tf-icons ri-database-2-line",
+      "slug": "Permissions",
+      "submenu": [
+        {
+          "url": "permissions-index",
+          "name": "Permissions List",
+          "slug": "permissionslist"
+        },
+        {
+          "url": "roles-index",
+          "name": "Role List",
+          "slug": "rolelist"
+        }
+      ]
     }
 
     
